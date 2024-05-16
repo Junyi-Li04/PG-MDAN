@@ -111,11 +111,13 @@ def train(training_mode, feature_extractor, class_classifier, domain_classifier,
         src_loss3 = domain_criterion(src_preds3.float(), source_label3s.long())
         src_loss4 = domain_criterion(src_preds4.float(), source_label4s.long())
 
+        # static weights
         domain_loss = 1*tgt_loss + 0.37*src_loss1 + 0.06*src_loss2 + 0.31*src_loss3 + 0.26*src_loss4
         class_loss = class_losst + 0.37*class_loss1s + 0.06*class_loss2s + 0.31*class_loss3s + 0.26*class_loss4s
 
-        # domain_loss = 1*tgt_loss + 1*src_loss1 + 0*src_loss2 + 1*src_loss3 + 0*src_loss4
-        # class_loss = 1*class_losst + 1*class_loss1s + 0*class_loss2s + 1*class_loss3s + 0*class_loss4s
+        #dinamic weights
+        # domain_loss = MFD_weights[epoch][0]*tgt_loss + MFD_weights[epoch][1]*src_loss1 + MFD_weights[epoch][2]*src_loss2 + MFD_weights[epoch][3]*src_loss3 + MFD_weights[epoch][4]*src_loss4
+        # class_loss = MFD_weights[epoch][0]*class_losst + MFD_weights[epoch][1]*class_loss1s + MFD_weights[epoch][2]*class_loss2s + MFD_weights[epoch][3]*class_loss3s + MFD_weights[epoch][4]*class_loss4s
 
         class_loss = class_loss/(5*batch_size*40*6)
 
